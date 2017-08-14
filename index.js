@@ -1,15 +1,18 @@
-'use strict';
 
-// Import the interface to Tessel hardware
-const tessel = require('tessel');
+var av = require('tessel-av');
+var os = require('os');
+var http = require('http');
+var port = 8000;
+var camera = new av.Camera();
 
-// Turn one of the LEDs on to start.
-tessel.led[2].on();
+http.createServer((request, response) => {
+    response.writeHead(200, { 'Content-Type': 'image/jpg' });
 
-// Blink!
-setInterval(() => {
-  tessel.led[2].toggle();
-  tessel.led[3].toggle();
-}, 100);
+camera.capture().pipe(response);
 
-console.log("I'm blinking! (Press CTRL + C to stop)");
+}).listen(port, () => console.log(`http://${os.hostname()}.local:${port}`));
+
+
+// Camera module
+// takes a picture
+// save the picture
