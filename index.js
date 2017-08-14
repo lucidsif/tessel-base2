@@ -1,18 +1,14 @@
+'use strict';
 
-var av = require('tessel-av');
-var os = require('os');
-var http = require('http');
-var port = 8000;
-var camera = new av.Camera();
-
-http.createServer((request, response) => {
-    response.writeHead(200, { 'Content-Type': 'image/jpg' });
-
-camera.capture().pipe(response);
-
-}).listen(port, () => console.log(`http://${os.hostname()}.local:${port}`));
+const path = require('path');
+const av = require('tessel-av');
+const mp3 = path.join(__dirname, './romeo_santos_sin_filtro.mp3');
+const sound = new av.Player(mp3);
+sound.play();
+sound.on('ended', function(seconds) {
+    sound.play();
+});
 
 
-// Camera module
-// takes a picture
-// save the picture
+
+
